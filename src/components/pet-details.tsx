@@ -1,9 +1,11 @@
 "use client";
 
 import { usePetContext } from "@/lib/hooks";
-import { Pet } from "@/lib/types";
+import { Pet } from "@prisma/client";
 import Image from "next/image";
 import { CheckoutPetButton, EditPetButton } from "./pet-buttons";
+import { deletePet } from "@/actions/actions";
+import { toast } from "sonner";
 
 export default function PetDetails() {
   const { selectedPet } = usePetContext();
@@ -34,8 +36,6 @@ type Props = {
 };
 
 function TopBar({ pet }: Props) {
-  const { handleCheckoutPet } = usePetContext();
-
   return (
     <div className="flex items-center bg-white px-8 py-5 border-b border-black/[0.08]">
       <Image
@@ -48,7 +48,14 @@ function TopBar({ pet }: Props) {
       <h2 className="text-3xl font-semibold leading-7 ml-5">{pet.name}</h2>
       <div className="ml-auto space-x-2">
         <EditPetButton />
-        <CheckoutPetButton onClickAction={() => handleCheckoutPet(pet.id)} />
+        <CheckoutPetButton
+          onClickAction={async () => {
+            const err = await deletePet(pet.id);
+            if (err) {
+              toast.warning(err.message);
+            }
+          }}
+        />
       </div>
     </div>
   );
