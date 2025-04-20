@@ -1,11 +1,12 @@
+import { logIn, signUp } from "@/actions/actions";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-export default function AuthForm() {
+export default function AuthForm({ type }: { type: "signin" | "signup" }) {
   return (
     <div>
-      <form>
+      <form action={type === "signin" ? logIn : signUp} className="space-y-4">
         <div className="space-y-1">
           <Label htmlFor="email" className="space-y-1">
             Email
@@ -16,7 +17,7 @@ export default function AuthForm() {
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" name="password" />
         </div>
-        <Button>Log In</Button>
+        <Button>{type === "signin" ? "Sign In" : "Sign Up"}</Button>
       </form>
     </div>
   );
