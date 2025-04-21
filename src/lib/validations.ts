@@ -22,3 +22,8 @@ export const petFormSchema = z
   }));
 
 export const petIdSchema = z.string().cuid();
+
+export const authSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
